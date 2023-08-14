@@ -23,14 +23,14 @@ const create = catchError(async(req, res) => {
 const getOne = catchError(async(req, res) => {
     const { id } = req.params;
     const result = await User.findByPk(id);
-    if(!result) return res.sendStatus(400);
+    if(!result) return res.sendStatus(404);
     return res.json(result);
 });
 
 const remove = catchError(async(req, res) => {
     const { id } = req.params;
     const result = await User.destroy({ where: {id} });
-    if(!result) return res.sendStatus(400);
+    if(!result) return res.sendStatus(404);
     return res.sendStatus(204);
 });
 
@@ -38,13 +38,13 @@ const update = catchError(async(req, res) => {
     const { id } = req.params;
     delete req.body.password;
     delete req.body.isVerified;
-    delete req.body.emailson
+    delete req.body.email
     ;
     const result = await User.update(
         req.body,
         { where: {id}, returning: true }
     );
-    if(result[0] === 0) return res.sendStatus(400);
+    if(result[0] === 0) return res.sendStatus(404);
     return res.json(result[1][0]);
 });
 
